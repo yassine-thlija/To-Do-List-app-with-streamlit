@@ -39,7 +39,15 @@ if "__main__" == __name__:
     startTime = st.sidebar.selectbox("Task begins at:", time_list()[0:-1])
     endTime = st.sidebar.selectbox("Task ends at:", time_list()[time_list().index(startTime)+1:])
     if st.sidebar.button("Add"):
-        days_and_tasks[currentDay].append(addTask)
+        days_and_tasks[currentDay].append([startTime,endTime,addTask])
         st.sidebar.success("Added Task")
     for i in days_and_tasks[currentDay]:
-        st.write(i)
+        st.markdown(f"##### {i[0]} -> {i[1]} : {i[2]}")
+
+    # Remove Task
+    removeTask = st.sidebar.selectbox("Remove Task", [i[2] for i in days_and_tasks[currentDay]])
+    if st.sidebar.button("Remove"):
+        for task in days_and_tasks[currentDay]:
+            if removeTask == task[2]:
+                days_and_tasks[currentDay].remove(task)
+                st.sidebar.success("Removed Task")
