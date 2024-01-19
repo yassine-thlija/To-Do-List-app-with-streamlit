@@ -1,5 +1,8 @@
 import streamlit as st
 from datetime import datetime, timedelta
+import pandas as pd
+
+#
 def time_list():
     start_time = datetime.strptime('00:00', '%H:%M')
     end_time = datetime.strptime('23:45', '%H:%M')
@@ -38,11 +41,15 @@ if "__main__" == __name__:
     addTask = st.sidebar.text_input("Add Task")
     startTime = st.sidebar.selectbox("Task begins at:", time_list()[0:-1])
     endTime = st.sidebar.selectbox("Task ends at:", time_list()[time_list().index(startTime)+1:])
+
     if st.sidebar.button("Add"):
-        days_and_tasks[currentDay].append([startTime,endTime,addTask])
+        days_and_tasks[currentDay].append([startTime,endTime,addTask,"Incomplete"])
         st.sidebar.success("Added Task")
-    for i in days_and_tasks[currentDay]:
-        st.markdown(f"##### {i[0]} -> {i[1]} : {i[2]}")
+    current_day_table = pd.DataFrame(days_and_tasks[currentDay], columns=["Start Time", "End Time", "Task", "Status"])
+    current_day_table = current_day_table.sort_values(by=["Start Time", "End Time"])
+
+    # Display Table
+    st.table(current_day_table)
 
     # Remove Task
     removeTask = st.sidebar.selectbox("Remove Task", [i[2] for i in days_and_tasks[currentDay]])
