@@ -4,7 +4,7 @@ import pandas as pd
 import json
 import os
 
-#Make a list of times between 00:00 and 23:45 with 15 minute intervals
+#A list of time intervals from 00:00 to 23:45 with 15 minute delta
 def time_list():
     start_time = datetime.strptime('00:00', '%H:%M')
     end_time = datetime.strptime('23:45', '%H:%M')
@@ -68,6 +68,7 @@ if "__main__" == __name__:
                 st.sidebar.success("Removed Task")
         with open('toDo.json', 'w') as f:
             json.dump(days_and_tasks, f)
+
     # Change Status
     changeStatus = st.sidebar.selectbox("Change Status", [i[2] for i in days_and_tasks[currentDay]])
     if st.sidebar.button("Complete"):
@@ -77,12 +78,14 @@ if "__main__" == __name__:
                 st.sidebar.success("Changed Status")
         with open('toDo.json', 'w') as f:
             json.dump(days_and_tasks, f)
+    
     #Clear All Tasks for the Day
     if st.sidebar.button("Clear Tasks for the Day"):
         days_and_tasks[currentDay] = []
         st.sidebar.success(f"Cleared All Tasks for {currentDay}")
         with open('toDo.json', 'w') as f:
             json.dump(days_and_tasks, f)
+    
     #Clear All Tasks for the Week
     if st.sidebar.button("Clear Tasks for the Week"):
         for day in days_and_tasks:
@@ -90,8 +93,8 @@ if "__main__" == __name__:
         st.sidebar.success("Cleared All Tasks for the Week")
         with open('toDo.json', 'w') as f:
             json.dump(days_and_tasks, f)
-    # Display Table
-        
+    
+    # Display Table    
     current_day_table = pd.DataFrame(days_and_tasks[currentDay], columns=["Start Time", "End Time", "Task", "Status"])
     current_day_table = current_day_table.sort_values(by=["Start Time", "End Time"])
     st.table(current_day_table)
