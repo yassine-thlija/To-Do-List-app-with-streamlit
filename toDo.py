@@ -2,7 +2,7 @@ import streamlit as st
 from datetime import datetime, timedelta
 import pandas as pd
 
-#
+#Make a list of times between 00:00 and 23:45 with 15 minute intervals
 def time_list():
     start_time = datetime.strptime('00:00', '%H:%M')
     end_time = datetime.strptime('23:45', '%H:%M')
@@ -58,3 +58,11 @@ if "__main__" == __name__:
             if removeTask == task[2]:
                 days_and_tasks[currentDay].remove(task)
                 st.sidebar.success("Removed Task")
+
+    # Change Status
+    changeStatus = st.sidebar.selectbox("Change Status", [i[2] for i in days_and_tasks[currentDay]])
+    if st.sidebar.button("Complete"):
+        for task in days_and_tasks[currentDay]:
+            if changeStatus == task[2]:
+                task[3] = "Complete"
+                st.sidebar.success("Changed Status")
