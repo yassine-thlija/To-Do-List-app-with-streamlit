@@ -46,51 +46,55 @@ if "__main__" == __name__:
                             "Saturday": st.session_state.saturday_list,
                             "Sunday": st.session_state.sunday_list}
     
+    #Clear All Tasks for the Day
+    if st.sidebar.button("Clear Tasks for the Day"):
+        days_and_tasks[currentDay] = []
+        st.sidebar.success(f"Cleared All Tasks for {currentDay} 😺")
+        with open('toDo.json', 'w') as f:
+            json.dump(days_and_tasks, f)
+
     # Add Task
     addTask = st.sidebar.text_input("Add Task")
+
+
     startTime = st.sidebar.selectbox("Task begins at:", time_list()[0:-1])
     endTime = st.sidebar.selectbox("Task ends at:", time_list()[time_list().index(startTime)+1:])
 
     if st.sidebar.button("Add"):
-        days_and_tasks[currentDay].append([startTime,endTime,addTask,"Incomplete"])
-        st.sidebar.success("Added Task")
+        days_and_tasks[currentDay].append([startTime,endTime,addTask,"Incomplete 🙀"])
+        st.sidebar.success("Added Task 😺")
         with open('toDo.json', 'w') as f:
             json.dump(days_and_tasks, f)
 
     
 
     # Remove Task
-    removeTask = st.sidebar.selectbox("Remove Task", [i[2] for i in days_and_tasks[currentDay]])
+    removeTask = st.sidebar.selectbox("Remove Task/Change Status", [i[2] for i in days_and_tasks[currentDay]])
     if st.sidebar.button("Remove"):
         for task in days_and_tasks[currentDay]:
             if removeTask == task[2]:
                 days_and_tasks[currentDay].remove(task)
-                st.sidebar.success("Removed Task")
+                st.sidebar.success("Removed Task 😺")
         with open('toDo.json', 'w') as f:
             json.dump(days_and_tasks, f)
 
     # Change Status
-    changeStatus = st.sidebar.selectbox("Change Status", [i[2] for i in days_and_tasks[currentDay]])
+    #changeStatus = st.sidebar.selectbox("Change Status", [i[2] for i in days_and_tasks[currentDay]])
     if st.sidebar.button("Complete"):
         for task in days_and_tasks[currentDay]:
-            if changeStatus == task[2]:
-                task[3] = "Complete"
-                st.sidebar.success("Changed Status")
+            if removeTask == task[2]:
+                task[3] = "Complete 😽"
+                st.sidebar.success("Changed Status 😺")
         with open('toDo.json', 'w') as f:
             json.dump(days_and_tasks, f)
     
-    #Clear All Tasks for the Day
-    if st.sidebar.button("Clear Tasks for the Day"):
-        days_and_tasks[currentDay] = []
-        st.sidebar.success(f"Cleared All Tasks for {currentDay}")
-        with open('toDo.json', 'w') as f:
-            json.dump(days_and_tasks, f)
+
     
     #Clear All Tasks for the Week
     if st.sidebar.button("Clear Tasks for the Week"):
         for day in days_and_tasks:
             days_and_tasks[day] = []
-        st.sidebar.success("Cleared All Tasks for the Week")
+        st.sidebar.success("Cleared All Tasks for the Week 😺")
         with open('toDo.json', 'w') as f:
             json.dump(days_and_tasks, f)
     
