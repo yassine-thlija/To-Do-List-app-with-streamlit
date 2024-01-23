@@ -4,8 +4,7 @@ import pandas as pd
 import json
 import os
 import requests
-
-
+import base64
 
 #A list of time intervals from 00:00 to 23:45 with 15 minute delta
 def time_list():
@@ -20,15 +19,54 @@ ip_address = requests.get('https://api.ipify.org').text
 unique_json_file = f'{ip_address}_unique_json_file'
 
 
+#Function to change the background of the sidebar
+def sidebar_bg(side_bg):
+
+   side_bg_ext = 'gif'
+
+   st.markdown(
+      f"""
+      <style>
+      [data-testid="stSidebar"] > div:first-child {{
+          background: url(data:image/{side_bg_ext};base64,{base64.b64encode(open(side_bg, "rb").read()).decode()});
+      }}
+      </style>
+      """,
+      unsafe_allow_html=True,
+      )
+
+#Function to change the background of the main page
+def set_bg_hack(main_bg):
+    '''
+    A function to unpack an image from root folder and set as bg.
+ 
+    Returns
+    -------
+    The background.
+    '''
+    
+    main_bg_ext = "png"     # set bg name
+        
+    st.markdown(
+         f"""
+         <style>
+         .stApp {{
+             background: url(data:image/{main_bg_ext};base64,{base64.b64encode(open(main_bg, "rb").read()).decode()});
+             background-size: cover;
+             background-repeat: no-repeat;
+             background-attachment: fixed;         }}
+         </style>
+         """,
+         unsafe_allow_html=True
+     )
+
 # Main Page
 if "__main__" == __name__:
-
+    
     #Wide mode
     st.set_page_config(layout="wide")
 
     # Title
-    st.title("Your To-Do List :spiral_note_pad:")
-
     #Days of the week
     currentDay = st.sidebar.selectbox("Select Day", ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"])
     
@@ -107,8 +145,16 @@ if "__main__" == __name__:
         with open('unique_json_file', 'w') as f:
             json.dump(days_and_tasks, f)
     
+
     # Display Table    
     current_day_table = pd.DataFrame(days_and_tasks[currentDay], columns=["Start Time", "End Time", "Task", "Status"])
     current_day_table = current_day_table.sort_values(by=["Start Time", "End Time"])
-    st.table(current_day_table)
+    
+    current_day_table = current_day_table.reset_index(drop=True)
+    if (days_and_tasks[currentDay] == []):
+        st.markdown("<h1 style='text-align: center;'>No Tasks for the Day 😿</h1>", unsafe_allow_html=True)
+    else:
+        st.markdown("<h1 style='text-align: center;'>🗒️Your To-Do List🗒️</h1>", unsafe_allow_html=True)
+        st.table(current_day_table)
+
 
