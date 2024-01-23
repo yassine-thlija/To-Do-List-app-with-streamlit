@@ -22,6 +22,10 @@ unique_json_file = f'{ip_address}_unique_json_file'
 
 # Main Page
 if "__main__" == __name__:
+
+    #Wide mode
+    st.set_page_config(layout="wide")
+
     # Title
     st.title("Your To-Do List :spiral_note_pad:")
 
@@ -85,7 +89,6 @@ if "__main__" == __name__:
             json.dump(days_and_tasks, f)
 
     # Change Status
-    #changeStatus = st.sidebar.selectbox("Change Status", [i[2] for i in days_and_tasks[currentDay]])
     if st.sidebar.button("Complete"):
         for task in days_and_tasks[currentDay]:
             if removeTask == task[2]:
