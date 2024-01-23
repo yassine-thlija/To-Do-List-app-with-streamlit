@@ -3,6 +3,9 @@ from datetime import datetime, timedelta
 import pandas as pd
 import json
 import os
+import requests
+
+
 
 #A list of time intervals from 00:00 to 23:45 with 15 minute delta
 def time_list():
@@ -13,6 +16,9 @@ def time_list():
         time_list.append(start_time.time().strftime('%H:%M'))
         start_time += timedelta(minutes=15)
     return time_list
+ip_address = requests.get('https://api.ipify.org').text
+unique_json_file = f'{ip_address}_unique_json_file'
+
 
 # Main Page
 if "__main__" == __name__:
@@ -34,8 +40,8 @@ if "__main__" == __name__:
     
     
     #Load Tasks from JSON
-    if os.path.exists('toDo.json') and os.path.getsize('toDo.json') > 0:
-        with open('toDo.json', 'r') as f:
+    if os.path.exists('unique_json_file') and os.path.getsize('unique_json_file') > 0:
+        with open('unique_json_file', 'r') as f:
             days_and_tasks = json.load(f)
     else:
         days_and_tasks = {"Monday": st.session_state.monday_list,
@@ -50,7 +56,7 @@ if "__main__" == __name__:
     if st.sidebar.button("Clear Tasks for the Day"):
         days_and_tasks[currentDay] = []
         st.sidebar.success(f"Cleared All Tasks for {currentDay} 😺")
-        with open('toDo.json', 'w') as f:
+        with open('unique_json_file', 'w') as f:
             json.dump(days_and_tasks, f)
 
     # Add Task
@@ -63,7 +69,7 @@ if "__main__" == __name__:
     if st.sidebar.button("Add"):
         days_and_tasks[currentDay].append([startTime,endTime,addTask,"Incomplete 🙀"])
         st.sidebar.success("Added Task 😺")
-        with open('toDo.json', 'w') as f:
+        with open('unique_json_file', 'w') as f:
             json.dump(days_and_tasks, f)
 
     
@@ -75,7 +81,7 @@ if "__main__" == __name__:
             if removeTask == task[2]:
                 days_and_tasks[currentDay].remove(task)
                 st.sidebar.success("Removed Task 😺")
-        with open('toDo.json', 'w') as f:
+        with open('unique_json_file', 'w') as f:
             json.dump(days_and_tasks, f)
 
     # Change Status
@@ -85,7 +91,7 @@ if "__main__" == __name__:
             if removeTask == task[2]:
                 task[3] = "Complete 😽"
                 st.sidebar.success("Changed Status 😺")
-        with open('toDo.json', 'w') as f:
+        with open('unique_json_file', 'w') as f:
             json.dump(days_and_tasks, f)
     
 
@@ -95,7 +101,7 @@ if "__main__" == __name__:
         for day in days_and_tasks:
             days_and_tasks[day] = []
         st.sidebar.success("Cleared All Tasks for the Week 😺")
-        with open('toDo.json', 'w') as f:
+        with open('unique_json_file', 'w') as f:
             json.dump(days_and_tasks, f)
     
     # Display Table    
