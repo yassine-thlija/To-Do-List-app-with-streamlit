@@ -3,7 +3,6 @@ from datetime import datetime, timedelta
 import pandas as pd
 import json
 import os
-import requests
 import base64
 
 #A list of time intervals from 00:00 to 23:45 with 15 minute delta
@@ -15,8 +14,6 @@ def time_list():
         time_list.append(start_time.time().strftime('%H:%M'))
         start_time += timedelta(minutes=15)
     return time_list
-#ip_address = requests.get('https://api.ipify.org').text
-#unique_json_file = f'{ip_address}_unique_json_file'
 
 
 #Function to change the background of the sidebar
@@ -104,7 +101,6 @@ if "__main__" == __name__:
     # Add Task
     addTask = st.sidebar.text_input("Add Task")
 
-
     startTime = st.sidebar.selectbox("Task begins at:", time_list()[0:-1])
     endTime = st.sidebar.selectbox("Task ends at:", time_list()[time_list().index(startTime)+1:])
 
@@ -113,8 +109,6 @@ if "__main__" == __name__:
         st.sidebar.success("Added Task 😺")
         with open('unique_json_file', 'w') as f:
             json.dump(days_and_tasks, f)
-
-    
 
     # Remove Task
     removeTask = st.sidebar.selectbox("Remove Task/Change Status", [i[2] for i in days_and_tasks[currentDay]])
@@ -135,8 +129,6 @@ if "__main__" == __name__:
         with open('unique_json_file', 'w') as f:
             json.dump(days_and_tasks, f)
     
-
-    
     #Clear All Tasks for the Week
     if st.sidebar.button("Clear Tasks for the Week"):
         for day in days_and_tasks:
@@ -145,7 +137,6 @@ if "__main__" == __name__:
         with open('unique_json_file', 'w') as f:
             json.dump(days_and_tasks, f)
     
-
     # Display Table    
     current_day_table = pd.DataFrame(days_and_tasks[currentDay], columns=["Start Time", "End Time", "Task", "Status"])
     current_day_table = current_day_table.sort_values(by=["Start Time", "End Time"])
@@ -156,5 +147,3 @@ if "__main__" == __name__:
     else:
         st.markdown("<h1 style='text-align: center;'>🗒️Your To-Do List🗒️</h1>", unsafe_allow_html=True)
         st.table(current_day_table)
-
-
