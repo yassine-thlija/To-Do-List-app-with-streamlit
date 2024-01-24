@@ -2,6 +2,7 @@
 - This app is still in development, but the source code is there for anyone to use
 - For now the idea is to make a weekly To-Do List, to help myself be organized
 - The app is public righ now, can't guarantee it will always be: *https://to-do-list-app.streamlit.app/*
+
 **How It looks like:**
 - With no Tasks:
 ![image](https://github.com/yassine-thlija/To-Do-List-app-with-streamlit/assets/59317301/6fe20f21-f96b-463a-84b6-8f9f0093e8a7)
