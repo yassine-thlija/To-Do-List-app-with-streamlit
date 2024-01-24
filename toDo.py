@@ -15,8 +15,8 @@ def time_list():
         time_list.append(start_time.time().strftime('%H:%M'))
         start_time += timedelta(minutes=15)
     return time_list
-ip_address = requests.get('https://api.ipify.org').text
-unique_json_file = f'{ip_address}_unique_json_file'
+#ip_address = requests.get('https://api.ipify.org').text
+#unique_json_file = f'{ip_address}_unique_json_file'
 
 
 #Function to change the background of the sidebar
