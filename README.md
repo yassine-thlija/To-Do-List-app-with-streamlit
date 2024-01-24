@@ -3,4 +3,8 @@
 - For now the idea is to make a weekly To-Do List, to help myself be organized
 
 **How It looks like:**
-  ![image](https://github.com/yassine-thlija/To-Do-List-app-with-streamlit/assets/59317301/967fbc66-86b7-4391-847d-6ad580b6ff20)
+- With no Tasks:
+![image](https://github.com/yassine-thlija/To-Do-List-app-with-streamlit/assets/59317301/6fe20f21-f96b-463a-84b6-8f9f0093e8a7)
+- With Tasks:
+![image](https://github.com/yassine-thlija/To-Do-List-app-with-streamlit/assets/59317301/3f0aa6ca-d767-45b5-b8bb-374bc4996a13)
+
