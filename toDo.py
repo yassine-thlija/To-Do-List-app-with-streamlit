@@ -63,11 +63,20 @@ if "__main__" == __name__:
     #Wide mode
     st.set_page_config(layout="wide")
     
-    username = st.sidebar.text_input("Username")
-    password = st.sidebar.text_input("Password", type='password')   
-    filename = f"{username}_{password}.json"
-    
+    #username = st.sidebar.text_input("Username")
+    #password = st.sidebar.text_input("Password", type='password')   
+    if 'username' in st.session_state and 'password' in st.session_state:
+        # The rest of your code goes here
+        pass
+    else:
+        username = st.sidebar.text_input("Username")
+        password = st.sidebar.text_input("Password", type='password')
+        
+        if username and password:
+            st.session_state.username = username
+            st.session_state.password = password   
 
+    filename = f"{username}_{password}.json"
     
 
     # Title
