@@ -66,15 +66,6 @@ if "__main__" == __name__:
     #username = st.sidebar.text_input("Username")
     #password = st.sidebar.text_input("Password", type='password')   
     if 'username' in st.session_state and 'password' in st.session_state:
-        # The rest of your code goes here
-        pass
-    else:
-        username = st.sidebar.text_input("Username")
-        password = st.sidebar.text_input("Password", type='password')
-        
-        if username and password:
-            st.session_state.username = username
-            st.session_state.password = password   
 
         filename = f"{username}_{password}.json"
         
@@ -163,3 +154,12 @@ if "__main__" == __name__:
         else:
             st.markdown("<h1 style='text-align: center;'>🗒️Your To-Do List🗒️</h1>", unsafe_allow_html=True)
             st.table(current_day_table)
+
+    else:
+        username = st.sidebar.text_input("Username")
+        password = st.sidebar.text_input("Password", type='password')
+        
+        if username and password:
+            st.session_state.username = username
+            st.session_state.password = password   
+
