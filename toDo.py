@@ -56,6 +56,9 @@ def set_bg_hack(main_bg):
          """,
          unsafe_allow_html=True
      )
+    
+username = ""
+password = ""
 
 # Main Page
 if "__main__" == __name__:
