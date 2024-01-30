@@ -159,7 +159,29 @@ if "__main__" == __name__:
         username = st.sidebar.text_input("Username")
         password = st.sidebar.text_input("Password", type='password')
         
-        if username and password:
-            st.session_state.username = username
-            st.session_state.password = password   
-
+        if (st.sidebar.button("Login")):
+            if username and password:
+                st.session_state.username = username
+                st.session_state.password = password
+                st.session_state.init = True
+                st.session_state.monday_list = []
+                st.session_state.tuesday_list = []
+                st.session_state.wednesday_list = []
+                st.session_state.thursday_list = []
+                st.session_state.friday_list = []
+                st.session_state.saturday_list = []
+                st.session_state.sunday_list = []
+                filename = f"{username}_{password}.json"
+                if os.path.exists(filename) and os.path.getsize(filename) > 0:
+                    with open(filename, 'r') as f:
+                        days_and_tasks = json.load(f)
+                else:
+                    days_and_tasks = {"Monday": st.session_state.monday_list,
+                                        "Tuesday": st.session_state.tuesday_list,
+                                        "Wednesday": st.session_state.wednesday_list,
+                                        "Thursday": st.session_state.thursday_list,
+                                        "Friday": st.session_state.friday_list,
+                                        "Saturday": st.session_state.saturday_list,
+                                        "Sunday": st.session_state.sunday_list}
+                with open(filename, 'w') as f:
+                    json.dump(days_and_tasks, f)
