@@ -60,13 +60,15 @@ def set_bg_hack(main_bg):
 # Main Page
 if "__main__" == __name__:
 
+    #Wide mode
+    st.set_page_config(layout="wide")
     
     username = st.sidebar.text_input("Username")
     password = st.sidebar.text_input("Password", type='password')   
     filename = f"{username}_{password}.json"
-    #Wide mode
+    
 
-    st.set_page_config(layout="wide")
+    
 
     # Title
     #Days of the week
