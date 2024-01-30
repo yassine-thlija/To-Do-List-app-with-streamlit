@@ -76,90 +76,90 @@ if "__main__" == __name__:
             st.session_state.username = username
             st.session_state.password = password   
 
-    filename = f"{username}_{password}.json"
-    
+        filename = f"{username}_{password}.json"
+        
 
-    # Title
-    #Days of the week
-    currentDay = st.sidebar.selectbox("Select Day", ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"])
-    
-    if 'init' not in st.session_state:
-        st.session_state.init = True
-        st.session_state.monday_list = []
-        st.session_state.tuesday_list = []
-        st.session_state.wednesday_list = []
-        st.session_state.thursday_list = []
-        st.session_state.friday_list = []
-        st.session_state.saturday_list = []
-        st.session_state.sunday_list = []
-    
-    
-    #Load Tasks from JSON
-    if os.path.exists(filename) and os.path.getsize(filename) > 0:
-        with open(filename, 'r') as f:
-            days_and_tasks = json.load(f)
-    else:
-        days_and_tasks = {"Monday": st.session_state.monday_list,
-                            "Tuesday": st.session_state.tuesday_list,
-                            "Wednesday": st.session_state.wednesday_list,
-                            "Thursday": st.session_state.thursday_list,
-                            "Friday": st.session_state.friday_list,
-                            "Saturday": st.session_state.saturday_list,
-                            "Sunday": st.session_state.sunday_list}
-    
-    #Clear All Tasks for the Day
-    if st.sidebar.button("Clear Tasks for the Day"):
-        days_and_tasks[currentDay] = []
-        st.sidebar.success(f"Cleared All Tasks for {currentDay} 😺")
-        with open(filename, 'w') as f:
-            json.dump(days_and_tasks, f)
+        # Title
+        #Days of the week
+        currentDay = st.sidebar.selectbox("Select Day", ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"])
+        
+        if 'init' not in st.session_state:
+            st.session_state.init = True
+            st.session_state.monday_list = []
+            st.session_state.tuesday_list = []
+            st.session_state.wednesday_list = []
+            st.session_state.thursday_list = []
+            st.session_state.friday_list = []
+            st.session_state.saturday_list = []
+            st.session_state.sunday_list = []
+        
+        
+        #Load Tasks from JSON
+        if os.path.exists(filename) and os.path.getsize(filename) > 0:
+            with open(filename, 'r') as f:
+                days_and_tasks = json.load(f)
+        else:
+            days_and_tasks = {"Monday": st.session_state.monday_list,
+                                "Tuesday": st.session_state.tuesday_list,
+                                "Wednesday": st.session_state.wednesday_list,
+                                "Thursday": st.session_state.thursday_list,
+                                "Friday": st.session_state.friday_list,
+                                "Saturday": st.session_state.saturday_list,
+                                "Sunday": st.session_state.sunday_list}
+        
+        #Clear All Tasks for the Day
+        if st.sidebar.button("Clear Tasks for the Day"):
+            days_and_tasks[currentDay] = []
+            st.sidebar.success(f"Cleared All Tasks for {currentDay} 😺")
+            with open(filename, 'w') as f:
+                json.dump(days_and_tasks, f)
 
-    # Add Task
-    addTask = st.sidebar.text_input("Add Task")
+        # Add Task
+        addTask = st.sidebar.text_input("Add Task")
 
-    startTime = st.sidebar.selectbox("Task begins at:", time_list()[0:-1])
-    endTime = st.sidebar.selectbox("Task ends at:", time_list()[time_list().index(startTime)+1:])
+        startTime = st.sidebar.selectbox("Task begins at:", time_list()[0:-1])
+        endTime = st.sidebar.selectbox("Task ends at:", time_list()[time_list().index(startTime)+1:])
 
-    if st.sidebar.button("Add"):
-        days_and_tasks[currentDay].append([startTime,endTime,addTask,"Incomplete 🙀"])
-        st.sidebar.success("Added Task 😺")
-        with open(filename, 'w') as f:
-            json.dump(days_and_tasks, f)
+        if st.sidebar.button("Add"):
+            days_and_tasks[currentDay].append([startTime,endTime,addTask,"Incomplete 🙀"])
+            st.sidebar.success("Added Task 😺")
+            with open(filename, 'w') as f:
+                json.dump(days_and_tasks, f)
 
-    # Remove Task
-    removeTask = st.sidebar.selectbox("Remove Task/Change Status", [i[2] for i in days_and_tasks[currentDay]])
-    if st.sidebar.button("Remove"):
-        for task in days_and_tasks[currentDay]:
-            if removeTask == task[2]:
-                days_and_tasks[currentDay].remove(task)
-                st.sidebar.success("Removed Task 😺")
-        with open(filename, 'w') as f:
-            json.dump(days_and_tasks, f)
+        # Remove Task
+        removeTask = st.sidebar.selectbox("Remove Task/Change Status", [i[2] for i in days_and_tasks[currentDay]])
+        if st.sidebar.button("Remove"):
+            for task in days_and_tasks[currentDay]:
+                if removeTask == task[2]:
+                    days_and_tasks[currentDay].remove(task)
+                    st.sidebar.success("Removed Task 😺")
+            with open(filename, 'w') as f:
+                json.dump(days_and_tasks, f)
 
-    # Change Status
-    if st.sidebar.button("Complete"):
-        for task in days_and_tasks[currentDay]:
-            if removeTask == task[2]:
-                task[3] = "Complete 😽"
-                st.sidebar.success("Changed Status 😺")
-        with open(filename, 'w') as f:
-            json.dump(days_and_tasks, f)
-    
-    #Clear All Tasks for the Week
-    if st.sidebar.button("Clear Tasks for the Week"):
-        for day in days_and_tasks:
-            days_and_tasks[day] = []
-        st.sidebar.success("Cleared All Tasks for the Week 😺")
-        with open(filename, 'w') as f:
-            json.dump(days_and_tasks, f)
-    
-    # Display Table    
-    current_day_table = pd.DataFrame(days_and_tasks[currentDay], columns=["Start Time", "End Time", "Task", "Status"])
-    current_day_table = current_day_table.sort_values(by=["Start Time", "End Time"])
-    
-    current_day_table = current_day_table.reset_index(drop=True)
-    if (days_and_tasks[currentDay] == []):
-        st.markdown("<h1 style='text-align: center;'>No Tasks for the Day 😿</h1>", unsafe_allow_html=True)
-    else:
-        st.markdown("<h1 style='text-align: center;'>🗒️Your To-Do List🗒️</h1>", unsafe_allow_html=True)
-        st.table(current_day_table)
+        # Change Status
+        if st.sidebar.button("Complete"):
+            for task in days_and_tasks[currentDay]:
+                if removeTask == task[2]:
+                    task[3] = "Complete 😽"
+                    st.sidebar.success("Changed Status 😺")
+            with open(filename, 'w') as f:
+                json.dump(days_and_tasks, f)
+        
+        #Clear All Tasks for the Week
+        if st.sidebar.button("Clear Tasks for the Week"):
+            for day in days_and_tasks:
+                days_and_tasks[day] = []
+            st.sidebar.success("Cleared All Tasks for the Week 😺")
+            with open(filename, 'w') as f:
+                json.dump(days_and_tasks, f)
+        
+        # Display Table    
+        current_day_table = pd.DataFrame(days_and_tasks[currentDay], columns=["Start Time", "End Time", "Task", "Status"])
+        current_day_table = current_day_table.sort_values(by=["Start Time", "End Time"])
+        
+        current_day_table = current_day_table.reset_index(drop=True)
+        if (days_and_tasks[currentDay] == []):
+            st.markdown("<h1 style='text-align: center;'>No Tasks for the Day 😿</h1>", unsafe_allow_html=True)
+        else:
+            st.markdown("<h1 style='text-align: center;'>🗒️Your To-Do List🗒️</h1>", unsafe_allow_html=True)
+            st.table(current_day_table)
